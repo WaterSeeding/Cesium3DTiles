@@ -1,7 +1,28 @@
 import "./app.css";
 import * as dat from "dat.gui";
 import { viewer } from "./main";
-import { createModel, flyModel } from "./model";
+import { createTileset, flyTileset } from "./tileset";
+//@ts-ignore;
+import tileset from "./tileset.js";
+
+let urlPrefix =
+  "https://storage.googleapis.com/ogc-3d-tiles/ayutthaya/tiledWithSkirts";
+
+let urls: any = []
+
+function getTilesUrl(tileObject: any) {
+  tileObject.children.forEach((child: any) => {
+    if (child?.content?.url) {
+      let url = `${urlPrefix}/${child.content.url}`;
+      urls.push(url);
+      if (child?.children && child.children.length > 0) {
+        getTilesUrl(child);
+      }
+    }
+  });
+}
+
+getTilesUrl(tileset.root);
 
 let targetRef: any = {
   getValue: (): any => {
@@ -14,26 +35,25 @@ gui.domElement.id = "gui";
 
 let guiParams: { [key: string]: any } = {};
 
-guiParams["Add a Cesium_Air"] = () => {
-  let modelEntity = targetRef.getValue();
-  if (modelEntity) {
+guiParams["Add a Cesium_3D_Tiles"] = () => {
+  let tileset = targetRef.getValue();
+  if (tileset) {
     viewer.entities.removeAll();
   }
-  createModel(
+  createTileset(
     viewer,
-    "./static/CesiumAir/Cesium_Air.glb",
-    5000.0,
+    "./static/3DTiles-DaYanTa/tileset.json",
     guiParams,
     targetRef
   );
 };
 
-guiParams["Fly to Cesium_Air"] = () => {
-  let modelEntity = targetRef.getValue();
-  if (modelEntity) {
-    flyModel(viewer, modelEntity);
+guiParams["Fly to Cesium_3D_Tiles"] = () => {
+  let tileset = targetRef.getValue();
+  if (tileset) {
+    flyTileset(viewer, tileset);
   }
 };
 
-gui.add(guiParams, "Add a Cesium_Air");
-gui.add(guiParams, "Fly to Cesium_Air");
+gui.add(guiParams, "Add a Cesium_3D_Tiles");
+gui.add(guiParams, "Fly to Cesium_3D_Tiles");
