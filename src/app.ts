@@ -2,27 +2,6 @@ import "./app.css";
 import * as dat from "dat.gui";
 import { viewer } from "./main";
 import { createTileset, flyTileset } from "./tileset";
-//@ts-ignore;
-import tileset from "./tileset.js";
-
-let urlPrefix =
-  "https://storage.googleapis.com/ogc-3d-tiles/ayutthaya/tiledWithSkirts";
-
-let urls: any = []
-
-function getTilesUrl(tileObject: any) {
-  tileObject.children.forEach((child: any) => {
-    if (child?.content?.url) {
-      let url = `${urlPrefix}/${child.content.url}`;
-      urls.push(url);
-      if (child?.children && child.children.length > 0) {
-        getTilesUrl(child);
-      }
-    }
-  });
-}
-
-getTilesUrl(tileset.root);
 
 let targetRef: any = {
   getValue: (): any => {
@@ -42,7 +21,7 @@ guiParams["Add a Cesium_3D_Tiles"] = () => {
   }
   createTileset(
     viewer,
-    "./static/3DTiles-DaYanTa/tileset.json",
+    "./static/output/tileset.json",
     guiParams,
     targetRef
   );

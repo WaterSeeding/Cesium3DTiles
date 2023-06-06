@@ -47,6 +47,15 @@ module.exports = {
     compress: true, // 压缩
     host: "0.0.0.0", // 设置局域网访问
     port: "3030", // 设置端口
+    headers: { "Access-Control-Allow-Origin": "" },
+    // proxy: {
+    //   "/api": {
+    //     target: "https://storage.googleapis.com",
+    //     pathRewrite: {
+    //       "/api": "",
+    //     },
+    //   },
+    // },
   },
   plugins: [
     new HtmlWebpackPlugin({
